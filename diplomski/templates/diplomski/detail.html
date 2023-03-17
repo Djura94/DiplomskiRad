@@ -85,14 +85,13 @@
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 class="fw-light">Portfolio</h1>
-        <p class="lead text-muted">Dobrodosli na moju stranicu na kojoj su prikazani programski jezici i znanja koja sam stekao tokom studija</p>
-        <p>
-          <a href="mailto:fdjuric@gmail.com" class="btn btn-primary my-2">E-mail</a>
-          <a href="https://www.linkedin.com/in/fdjuric/" class="btn btn-secondary my-2">LinkedIn profil</a>
-        </p>
-        <!--<img src="{% static 'logo.jpg' %}" height="300"></img> ubacivanje slike-->
-      </div>
+            <h1 class="fw-light">Detalji predmeta</h1>
+            <p class="lead text-muted">{{course.summary}}</p>
+            <img src="{{course.image.url}}" height="300">
+            <p>
+                <a href="{% url 'index' %}" class="btn btn-primary my-2">Back</a>
+            </p>
+        </div>
     </div>
   </section>
 
@@ -102,9 +101,7 @@
         {% for course in courses.all %}
         <div class="col">
           <div class="card shadow-sm">
-            <a href="{% url 'detail' course.id %}">
             <img class="card-img-top" src="{{course.image.url}}">
-            </a>
             <div class="card-body">
               <p class="card-text"> {{course.summary}}</p>
             </div>

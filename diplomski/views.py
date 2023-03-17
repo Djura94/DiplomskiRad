@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 
 from django.http import HttpResponse
 
@@ -9,3 +9,7 @@ from .models import Course
 def index(request):
     courses = Course.objects
     return render(request, 'diplomski/index.html',{'courses':courses})
+
+def detail (request,course_id):
+    course_detail = get_object_or_404(Course,pk=course_id)
+    return render(request, 'diplomski/detail.html',{'course':course_detail})
