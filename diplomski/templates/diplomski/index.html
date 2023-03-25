@@ -85,6 +85,11 @@
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
+        <form action="{%url 'search_courses'%}" method="get">
+          {%csrf_token%}
+          <input type="text" name="q" placeholder="Pretrazi">
+          <button type="submit" class="btn btn-primary my-2">Pretrazi</button>
+        </form>
         <h1 class="fw-light">Portfolio</h1>
         <p class="lead text-muted">Dobrodosli na moju stranicu na kojoj su prikazani programski jezici i znanja koja sam stekao tokom studija</p>
         <p>
