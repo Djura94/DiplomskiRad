@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.views.generic import ListView
-from .models import Course
-from .forms import CourseForm
+from .models import Course, SubscribedUsers
+from .decorators import user_is_superuser
+from .forms import CourseForm, NewsletterForm
 from django.contrib.auth.decorators import login_required
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+from django.contrib import messages
+from django.core.mail import EmailMessage
 
 # Create your views here.
 
@@ -77,3 +79,61 @@ def edit_data(request, course_id):
     
     # Render the template with the form and course objects
     return render(request, 'diplomski/edit_data.html', {'form': form, 'course': course})
+
+def subscribe(request):
+    if request.method =='POST':
+        name = request.POST.get('name',None)
+        email =request.POST.get('email',None)
+
+        if not name or not email:
+            messages.error(request,"Morate unijeti korektne podatke da bi se pretplatili na Newsletter")
+            return redirect('index')
+        
+        if get_user_model().objects.filter(email=email).first():
+            messages.error(request,f"Vec postoji korisnik sa ovim mejlom.")
+            return redirect(request.META.get("HTTP_REFERER",'index'))
+        
+        subscribe_user=SubscribedUsers.objects.filter(email=email).first()
+        if subscribe_user:
+            messages.error(request,f"{email} email adresa vec postoji.")
+            return redirect(request.META.get("HTTP_REFERER",'index'))
+        
+        try:
+            validate_email(email)
+        except ValidationError as e:
+            messages.error(request, e.messages[0])
+            return redirect('index')
+        
+        subscribe_model_instance = SubscribedUsers()
+        subscribe_model_instance.name=name
+        subscribe_model_instance.email=email
+        subscribe_model_instance.save()
+        messages.success(request,f'{email} Uspjesno ste se prijavili na moj newsletter')
+        return redirect(request.META.get("HTTP_REFERER",'index'))
+
+@user_is_superuser
+def newsletter(request):
+    if request.method == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data.get('subject')
+            receivers = form.cleaned_data.get('receivers').split(',')
+            email_message = form.cleaned_data.get('message')
+
+            mail = EmailMessage(subject, email_message, f"<{request.user.email}>", bcc=receivers)
+            mail.content_subtype = 'html'
+
+            if mail.send():
+                messages.success(request, "Email uspjesno poslat")
+            else:
+                messages.error(request, "Greska pri slanju email-a")
+
+        else:
+            for error in list(form.errors.values()):
+                messages.error(request, error)
+
+        return redirect('index')
+
+    form = NewsletterForm()
+    form.fields['receivers'].initial = ','.join([active.email for active in SubscribedUsers.objects.all()])
+    return render(request=request, template_name='diplomski/newsletter.html', context={'form': form})
