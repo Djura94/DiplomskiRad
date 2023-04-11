@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .import views
-from .views import add_course,edit_data
+from .views import add_course,edit_data, unsubscribe
 
 
 
@@ -14,6 +14,7 @@ urlpatterns = [
     path('add-course/', views.add_course, name='add-course'),
     path('<int:course_id>/edit/', views.edit_data, name='edit_data'),
     path('subscribe/', views.subscribe, name="subscribe"),
+    path('unsubscribe/<str:email>/', views.unsubscribe, name='unsubscribe'),
     path('newsletter/',views.newsletter, name="newsletter"),
 
 ]

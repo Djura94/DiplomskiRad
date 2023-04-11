@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.urls import reverse
 from django.views.generic import ListView
 from .models import Course, SubscribedUsers
 from .decorators import user_is_superuser
@@ -120,13 +121,20 @@ def newsletter(request):
             receivers = form.cleaned_data.get('receivers').split(',')
             email_message = form.cleaned_data.get('message')
 
-            mail = EmailMessage(subject, email_message, f"<{request.user.email}>", bcc=receivers)
-            mail.content_subtype = 'html'
+            # Include the unsubscribe hyperlink in the email content for each receiver
+            for receiver in receivers:
+                # Get the unsubscribe URL for each receiver
+                unsubscribe_url = request.build_absolute_uri(reverse('unsubscribe', args=[receiver]))
 
-            if mail.send():
-                messages.success(request, "Email uspjesno poslat")
-            else:
-                messages.error(request, "Greska pri slanju email-a")
+                # Include the unsubscribe hyperlink in the email content
+                email_message_with_unsubscribe = f"{email_message}\n\nTo unsubscribe from our newsletter, click on the following link: {unsubscribe_url}"
+
+                mail = EmailMessage(subject, email_message_with_unsubscribe, f"<{request.user.email}>", [receiver])
+                mail.content_subtype = 'html'
+                if mail.send():
+                    messages.success(request, f"Email uspjesno poslat na {receiver}")
+                else:
+                    messages.error(request, f"Greska pri slanju email-a na {receiver}")
 
         else:
             for error in list(form.errors.values()):
@@ -137,3 +145,16 @@ def newsletter(request):
     form = NewsletterForm()
     form.fields['receivers'].initial = ','.join([active.email for active in SubscribedUsers.objects.all()])
     return render(request=request, template_name='diplomski/newsletter.html', context={'form': form})
+
+
+
+def unsubscribe(request, email):
+    try:
+        subscriber = SubscribedUsers.objects.get(email=email)
+        # Remove the subscriber from the database
+        subscriber.delete()
+        # Redirect to a success page or display a success message
+        return render(request, 'diplomski/unsubscribe_success.html')
+    except SubscribedUsers.DoesNotExist:
+        # Handle case when subscriber is not found
+        return render(request, 'diplomski/unsubscribe_error.html')
