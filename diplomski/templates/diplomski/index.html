@@ -75,7 +75,13 @@
 
       .welcome-message {
         color: white;
-      } 
+      }
+      
+
+      .card-img-top {
+
+        object-fit: contain, scale-down; /* Control how the image is displayed within the card */
+      }
     </style>
 
     
@@ -85,20 +91,20 @@
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <div class="container-fluid">
         {% if user.is_authenticated %}
-          <p class="welcome-message">Welcome {{ user.username }}
+          <p class="welcome-message">Dobrodošao {{ user.username }}
             <a href="admin/">Admin</a>
             <a href="{% url 'newsletter' %}">Newsletter</a>
-            <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'logout' %}">Izloguj se</a>
           </p>
         {% else %}
-          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'login' %}">Uloguj se</a>
         {% endif %}  
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Sadrzaj</h5>
+            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Sadržaj</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
@@ -110,7 +116,7 @@
             <form action="{%url 'search_courses'%}" method="get">
               {%csrf_token%}
               <input type="text" name="q" placeholder="Pretrazi">
-              <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Pretrazi</button>
+              <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Pretraži</button>
             </form>
           </div>
         </div>
@@ -124,7 +130,7 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Portfolio</h1>
-        <p class="lead text-muted">Dobrodosli na moju stranicu na kojoj su prikazani programski jezici i znanja koja sam stekao tokom studija</p>
+        <p class="lead text-muted">Dobrodošli na moju stranicu na kojoj su prikazani programski jezici i znanja koja sam stekao tokom studija</p>
         <p>
           <a href="mailto:fdjuric@gmail.com" class="btn btn-primary my-2">E-mail</a>
           <a href="https://www.linkedin.com/in/fdjuric/" class="btn btn-secondary my-2">LinkedIn profil</a>
@@ -149,7 +155,7 @@
                 <form method="POST" action="{% url 'edit_data' course.id %}">
                   {% csrf_token %}
                   <input type="hidden" name="id" value="{{ course.id }}">
-                  <button type="submit" class="btn btn-sm btn-outline-secondary">Edit</button>
+                  <button type="submit" class="btn btn-sm btn-outline-secondary">Edituj</button>
                 </form>
               </div>
               {% endif %}
@@ -160,7 +166,7 @@
         {% if user.is_authenticated %}
         <div class="col">
           <div class="card shadow-sm">
-            <a href="{% url 'add-course' %}" class="btn btn-primary">Add Course</a>
+            <a href="{% url 'add-course' %}" class="btn btn-primary">Dodaj kurs</a>
           </div>
         </div>
         {% endif %}
@@ -172,7 +178,7 @@
     <div class="row py-lg-5">
       <div class="col-lg-6 col-md-8 mx-auto">
         <h1 class="fw-light">Podjelite ovu stranicu</h1>
-        <p class="lead text-muted">U slucaju da mislite da bi moja znanja i kvalifikacije nekome pomogle, podjelite ovu stranicu na nekoj od vasih drustvenih mreza</p>
+        <p class="lead text-muted">U slučaju da mislite da bi moja znanja i kvalifikacije nekome pomogle, podjelite ovu stranicu na nekoj od vaših društvenih mreža</p>
         <p>
           <div style="display: flex; flex-direction: row; justify-content: center;">
             <span style="float:left;margin-left:10px;" class="nav-item">{% post_to_facebook object_or_url '<i class="fab fa-facebook fa-2x"></i>' %}</span>

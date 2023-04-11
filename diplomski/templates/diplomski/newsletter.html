@@ -1,13 +1,23 @@
-{% load crispy_forms_tags %}
-{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Newsletter</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% load crispy_forms_tags %}
+    {% block content %}     
     <div class="content-section">
-        <form method="POST">
+        <form method="POST" class="form" style="max-width: 500px; margin: 0 auto; padding: 20px;">
             {% csrf_token %}
-            {{ form|crispy  }}
-            {{ form.media  }}
+            {{ form|crispy }}
+            {{ form.media }}
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Send</button>
+                <button class="btn btn-outline-info" type="submit">Pošalji</button>
+                <a href="{% url 'index' %}" class="btn btn-outline-secondary">Nazad</a>
             </div>
         </form>
     </div>
-{% endblock content %}
+    {% endblock content %}
+</body>
+</html>

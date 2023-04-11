@@ -127,7 +127,7 @@ def newsletter(request):
                 unsubscribe_url = request.build_absolute_uri(reverse('unsubscribe', args=[receiver]))
 
                 # Include the unsubscribe hyperlink in the email content
-                email_message_with_unsubscribe = f"{email_message}\n\nTo unsubscribe from our newsletter, click on the following link: {unsubscribe_url}"
+                email_message_with_unsubscribe = f"{email_message}\n\nDa se ispisete sa newslettera, kliknite na sljedeci link: {unsubscribe_url}"
 
                 mail = EmailMessage(subject, email_message_with_unsubscribe, f"<{request.user.email}>", [receiver])
                 mail.content_subtype = 'html'
