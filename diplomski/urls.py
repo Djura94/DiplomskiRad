@@ -1,7 +1,6 @@
 from django.urls import path
-
 from .import views
-from .views import add_course,edit_data, unsubscribe
+from .views import add_course,edit_data, unsubscribe,download_cv
 
 
 
@@ -16,5 +15,6 @@ urlpatterns = [
     path('subscribe/', views.subscribe, name="subscribe"),
     path('unsubscribe/<str:email>/', views.unsubscribe, name='unsubscribe'),
     path('newsletter/',views.newsletter, name="newsletter"),
+    path('download/cv/', download_cv, name='download_cv'),
 
 ]

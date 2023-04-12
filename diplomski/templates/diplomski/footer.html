@@ -1,5 +1,5 @@
 <footer class="footer-color text-center footer-text">
-    <div class="container p-4">
+    <div class="container p-4" style="max-width:inherit; background-color: aqua;">
         {% if not user.is_authenticated %}
             <section class="">
                 <form action="{% url 'subscribe' %}" method="post">

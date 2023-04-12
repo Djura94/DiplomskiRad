@@ -10,6 +10,9 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from django.http import HttpResponse
+from django.conf import settings
+import os
 
 # Create your views here.
 
@@ -158,3 +161,11 @@ def unsubscribe(request, email):
     except SubscribedUsers.DoesNotExist:
         # Handle case when subscriber is not found
         return render(request, 'diplomski/unsubscribe_error.html')
+
+
+def download_cv(request):
+    cv_file_path = os.path.join(settings.MEDIA_ROOT, 'FilipDjuricCV.pdf')  # Path to your CV file
+    with open(cv_file_path, 'rb') as cv_file:
+        response = HttpResponse(cv_file.read(), content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="FilipDjuricCV.pdf"'
+        return response
