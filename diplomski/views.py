@@ -45,7 +45,7 @@ def login_view(request):
             login(request, user)
             return redirect('index')
         else:
-            return render(request, 'diplomski/login.html', {'error': 'Invalid username or password'})
+            return render(request, 'diplomski/login.html', {'error': 'Pogrešan username ili šifra.'})
     else:
         return render(request, 'diplomski/login.html')
 def logout_view(request):
@@ -94,7 +94,7 @@ def subscribe(request):
             return redirect('index')
         
         if get_user_model().objects.filter(email=email).first():
-            messages.error(request,f"Vec postoji korisnik sa ovim mejlom.")
+            messages.error(request,f"Već postoji korisnik sa ovim mejlom.")
             return redirect(request.META.get("HTTP_REFERER",'index'))
         
         subscribe_user=SubscribedUsers.objects.filter(email=email).first()
@@ -112,7 +112,7 @@ def subscribe(request):
         subscribe_model_instance.name=name
         subscribe_model_instance.email=email
         subscribe_model_instance.save()
-        messages.success(request,f'{email} Uspjesno ste se prijavili na moj newsletter')
+        messages.success(request,f'{email} Uspješno ste se prijavili na moj newsletter')
         return redirect(request.META.get("HTTP_REFERER",'index'))
 
 @user_is_superuser
@@ -130,14 +130,14 @@ def newsletter(request):
                 unsubscribe_url = request.build_absolute_uri(reverse('unsubscribe', args=[receiver]))
 
                 # Include the unsubscribe hyperlink in the email content
-                email_message_with_unsubscribe = f"{email_message}\n\nDa se ispisete sa newslettera, kliknite na sljedeci link: {unsubscribe_url}"
+                email_message_with_unsubscribe = f"{email_message}\n\nDa se ispišete sa newslettera, kliknite na sljedeci link: {unsubscribe_url}"
 
                 mail = EmailMessage(subject, email_message_with_unsubscribe, f"<{request.user.email}>", [receiver])
                 mail.content_subtype = 'html'
                 if mail.send():
-                    messages.success(request, f"Email uspjesno poslat na {receiver}")
+                    messages.success(request, f"Email uspješno poslat na {receiver}")
                 else:
-                    messages.error(request, f"Greska pri slanju email-a na {receiver}")
+                    messages.error(request, f"Greška pri slanju email-a na {receiver}")
 
         else:
             for error in list(form.errors.values()):
