@@ -134,7 +134,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 DEBUG = False
 
 #SECRET KEY
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 
 GOOGLE_ANALYTICS = {
@@ -145,7 +145,7 @@ GOOGLE_ANALYTICS = {
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'fdjportfolio@gmail.com'
-EMAIL_HOST_PASSWORD = 'tkuknatheyznwfrf'
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
