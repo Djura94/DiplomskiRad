@@ -133,6 +133,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+#SECRET KEY
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+
 GOOGLE_ANALYTICS = {
     'google_analytics_id': 'G-JF6K8EVQC2',
 }
