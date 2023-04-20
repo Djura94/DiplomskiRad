@@ -20,7 +20,6 @@ django-social-share==2.3.0
 django-tinymce==3.6.1
 gunicorn==20.1.0
 idna==3.4
-imagekitio==3.0.1
 kombu==5.2.4
 Pillow==9.4.0
 prompt-toolkit==3.0.38
