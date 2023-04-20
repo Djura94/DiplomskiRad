@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Course(models.Model):
-    image = models.ImageField()
+    image = models.CharField(max_length=500, default='')
     summary=models.CharField(max_length=200)
     description=models.CharField(max_length=400, default='')
     profesor_link=models.CharField(max_length=100, default='')
