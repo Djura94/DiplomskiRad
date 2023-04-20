@@ -8,6 +8,7 @@ class Course(models.Model):
     summary=models.CharField(max_length=200)
     description=models.CharField(max_length=400, default='')
     profesor_link=models.CharField(max_length=100, default='')
+    
     def __str__(self):
         return self.summary
 
